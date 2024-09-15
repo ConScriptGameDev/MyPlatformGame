@@ -1,0 +1,23 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/enemy_hit.wav-d916815e465f9f8adb41e102350d8f79.sample"
+
+[deps]
+
+source_file="res://Assets/Frog_Adventure/Sounds/enemy_hit.wav"
+dest_files=[ "res://.import/enemy_hit.wav-d916815e465f9f8adb41e102350d8f79.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

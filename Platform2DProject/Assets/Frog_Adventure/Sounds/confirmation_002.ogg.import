@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/confirmation_002.ogg-b4412e129f3ba018d31d2914550c397a.oggstr"
+
+[deps]
+
+source_file="res://Assets/Frog_Adventure/Sounds/confirmation_002.ogg"
+dest_files=[ "res://.import/confirmation_002.ogg-b4412e129f3ba018d31d2914550c397a.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

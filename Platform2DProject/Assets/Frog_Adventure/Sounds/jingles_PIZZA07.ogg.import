@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/jingles_PIZZA07.ogg-e621cedccd7c540cb2226b2213f84279.oggstr"
+
+[deps]
+
+source_file="res://Assets/Frog_Adventure/Sounds/jingles_PIZZA07.ogg"
+dest_files=[ "res://.import/jingles_PIZZA07.ogg-e621cedccd7c540cb2226b2213f84279.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

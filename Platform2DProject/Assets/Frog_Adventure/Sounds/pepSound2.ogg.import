@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/pepSound2.ogg-d697293646f8b80b990ab659dbce559c.oggstr"
+
+[deps]
+
+source_file="res://Assets/Frog_Adventure/Sounds/pepSound2.ogg"
+dest_files=[ "res://.import/pepSound2.ogg-d697293646f8b80b990ab659dbce559c.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

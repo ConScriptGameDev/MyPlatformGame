@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/switch23.ogg-4df42b109c7eeb1b811c2feb5cdc6e15.oggstr"
+
+[deps]
+
+source_file="res://Assets/Frog_Adventure/Sounds/switch23.ogg"
+dest_files=[ "res://.import/switch23.ogg-4df42b109c7eeb1b811c2feb5cdc6e15.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

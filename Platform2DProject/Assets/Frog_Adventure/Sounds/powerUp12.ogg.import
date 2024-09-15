@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/powerUp12.ogg-9f7d1e0b2a6418ac1bf89ab87a7577b3.oggstr"
+
+[deps]
+
+source_file="res://Assets/Frog_Adventure/Sounds/powerUp12.ogg"
+dest_files=[ "res://.import/powerUp12.ogg-9f7d1e0b2a6418ac1bf89ab87a7577b3.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0
