@@ -11,7 +11,7 @@ config_version=4
 [application]
 
 config/name="Platform2DProject"
-run/main_scene="res://Scenes/NivelTeste.tscn"
+run/main_scene="res://Scenes/NiveTeste2.tscn"
 
 [autoload]
 
