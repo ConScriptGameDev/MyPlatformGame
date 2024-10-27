@@ -21,6 +21,9 @@ func _physics_process(delta: float) -> void:
 #		HIT:
 #			hit(delta)
 		
+	if $waterColl.is_colliding():
+		self.global_position = Global.check
+		
 func gravity(delta):
 	velocity.y += 800 * delta
 
@@ -110,4 +113,7 @@ func isFalling():
 func setState(newState):
 	if newState != currentState:
 		enterState = true
-	currentState = newState
+	currentState = newState	
+
+func _on_hurtBox_area_entered(area: Area2D) -> void:
+	global_position = Global.check

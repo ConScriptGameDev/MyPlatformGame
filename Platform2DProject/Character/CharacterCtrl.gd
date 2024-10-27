@@ -19,13 +19,13 @@ var Pink = preload("res://Character/Pink.tscn")
 var Virtual = preload("res://Character/Virtual.tscn")
 
 func characterChange():
-	if Input.is_action_just_pressed("ui_up") and canNinja:
+	if Input.is_action_just_pressed("ui_up"):# and canNinja:
 		change(2, father)
-	if Input.is_action_just_pressed("ui_down") and canMasked:
+	if Input.is_action_just_pressed("ui_down"):# and canMasked:
 		change(1, father)
-	if Input.is_action_just_pressed("ui_left") and canCloundy:
+	if Input.is_action_just_pressed("ui_left"):# and canCloundy:
 		change(3, father)
-	if Input.is_action_just_pressed("ui_right") and canFuturist:
+	if Input.is_action_just_pressed("ui_right"):# and canFuturist:
 		change(4, father)
 
 func change(value, parent):
@@ -84,6 +84,12 @@ func change(value, parent):
 		oldChar.queue_free()
 		if facingLeft:
 			virtual.sprite.flip_h = true
+			virtual.counter.scale.x = -1
+			virtual.particle.scale.x = -1
+			virtual.pos.position.x = -36
 		else:
 			virtual.sprite.flip_h = false
+			virtual.counter.scale.x = 1
+			virtual.particle.scale.x = 1
+			virtual.pos.position.x = 36
 		return virtual

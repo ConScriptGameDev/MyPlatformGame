@@ -11,11 +11,12 @@ config_version=4
 [application]
 
 config/name="Platform2DProject"
-run/main_scene="res://NivelTeste.tscn"
+run/main_scene="res://Scenes/NivelTeste.tscn"
 
 [autoload]
 
 CharacterCtrl="*res://Character/CharacterCtrl.gd"
+Global="*res://Scripts/global.gd"
 
 [display]
 
@@ -46,6 +47,20 @@ jump={
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":32,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
  ]
 }
+unique={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":87,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
+ ]
+}
+
+[layer_names]
+
+2d_physics/layer_1="Player"
+2d_physics/layer_2="Solid"
+2d_physics/layer_3="Through"
+2d_physics/layer_4="Water"
+2d_physics/layer_5="Enemie_pull"
+2d_physics/layer_6="Enemie"
 
 [mono]
 

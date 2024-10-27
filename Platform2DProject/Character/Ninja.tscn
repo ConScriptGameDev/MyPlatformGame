@@ -10,34 +10,7 @@
 [ext_resource path="res://Forms/Ninja Frog/Wall Jump (32x32).png" type="Texture" id=8]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 9, 12 )
-
-[sub_resource type="Animation" id=53]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/path = NodePath("texture:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ ExtResource( 4 ) ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("texture:frame")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ 1 ]
-}
+extents = Vector2( 8, 12 )
 
 [sub_resource type="Animation" id=54]
 resource_name = "doubleJump"
@@ -319,7 +292,11 @@ tracks/2/keys = {
 "values": [ 0, 1, 2, 3, 4 ]
 }
 
-[node name="Ninja" type="KinematicBody2D"]
+[sub_resource type="CapsuleShape2D" id=56]
+radius = 8.0
+height = 8.0
+
+[node name="Ninja" type="KinematicBody2D" groups=["player"]]
 position = Vector2( 0, -32 )
 scale = Vector2( 2, 2 )
 collision_mask = 2
@@ -330,13 +307,11 @@ position = Vector2( 0, 4 )
 shape = SubResource( 1 )
 
 [node name="texture" type="Sprite" parent="."]
-texture = ExtResource( 4 )
+texture = ExtResource( 5 )
 hframes = 11
-frame = 1
 
 [node name="anim" type="AnimationPlayer" parent="."]
 autoplay = "idle"
-anims/RESET = SubResource( 53 )
 anims/doubleJump = SubResource( 54 )
 anims/fall = SubResource( 50 )
 anims/hit = SubResource( 51 )
@@ -346,36 +321,42 @@ anims/run = SubResource( 48 )
 anims/wallJump = SubResource( 55 )
 
 [node name="RayCast2D" type="RayCast2D" parent="."]
+visible = false
 position = Vector2( -7, 8 )
 enabled = true
 cast_to = Vector2( 0, 10 )
 collision_mask = 2
 
 [node name="RayCast2D2" type="RayCast2D" parent="."]
+visible = false
 position = Vector2( 8, 8 )
 enabled = true
 cast_to = Vector2( 0, 10 )
 collision_mask = 2
 
-[node name="RayCast2D3" type="RayCast2D" parent="."]
-position = Vector2( 0.5, 4 )
-enabled = true
-cast_to = Vector2( 15, 0 )
-collision_mask = 2
-
-[node name="RayCast2D4" type="RayCast2D" parent="."]
-position = Vector2( 0.5, 4 )
-scale = Vector2( -1, 1 )
-enabled = true
-cast_to = Vector2( 15, 0 )
-collision_mask = 2
-
 [node name="camera" type="Camera2D" parent="."]
 current = true
-zoom = Vector2( 0.8, 0.8 )
-limit_left = 0
-limit_top = -1120
-limit_right = 1984
-limit_bottom = 720
 editor_draw_limits = true
 editor_draw_drag_margin = true
+
+[node name="waterColl" type="RayCast2D" parent="."]
+visible = false
+enabled = true
+cast_to = Vector2( 0, 15 )
+collision_mask = 8
+
+[node name="RayCast2D3" type="RayCast2D" parent="."]
+position = Vector2( 0, 4 )
+enabled = true
+cast_to = Vector2( 9, 0 )
+collision_mask = 2
+
+[node name="hurtBox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 48
+
+[node name="collision" type="CollisionShape2D" parent="hurtBox"]
+rotation = 1.5708
+shape = SubResource( 56 )
+
+[connection signal="area_entered" from="hurtBox" to="." method="_on_hurtBox_area_entered"]

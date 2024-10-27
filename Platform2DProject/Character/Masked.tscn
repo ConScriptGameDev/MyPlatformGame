@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://Character/Masked.gd" type="Script" id=1]
 [ext_resource path="res://Forms/Mask Dude/Hit (32x32).png" type="Texture" id=2]
@@ -6,9 +6,10 @@
 [ext_resource path="res://Forms/Mask Dude/Fall (32x32).png" type="Texture" id=4]
 [ext_resource path="res://Forms/Mask Dude/Idle (32x32).png" type="Texture" id=5]
 [ext_resource path="res://Forms/Mask Dude/Run (32x32).png" type="Texture" id=6]
+[ext_resource path="res://Assets/Bubbles/Coloured/32x32/bubble_1.png" type="Texture" id=7]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 10.5, 12 )
+extents = Vector2( 8, 14 )
 
 [sub_resource type="Animation" id=50]
 resource_name = "fall"
@@ -210,19 +211,24 @@ tracks/2/keys = {
 "values": [ ExtResource( 6 ) ]
 }
 
-[node name="Masked" type="KinematicBody2D"]
+[sub_resource type="CapsuleShape2D" id=53]
+radius = 8.0
+height = 8.0
+
+[node name="Masked" type="KinematicBody2D" groups=["player", "swim"]]
 position = Vector2( 0, -32 )
 scale = Vector2( 2, 2 )
 collision_mask = 2
 script = ExtResource( 1 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( 0.5, 4 )
+position = Vector2( 0, 2 )
 shape = SubResource( 1 )
 
 [node name="texture" type="Sprite" parent="."]
-texture = ExtResource( 6 )
-hframes = 12
+texture = ExtResource( 5 )
+hframes = 11
+frame = 6
 
 [node name="anim" type="AnimationPlayer" parent="."]
 autoplay = "idle"
@@ -246,10 +252,27 @@ collision_mask = 2
 
 [node name="camera" type="Camera2D" parent="."]
 current = true
-zoom = Vector2( 0.8, 0.8 )
-limit_left = 0
-limit_top = -1120
-limit_right = 1984
-limit_bottom = 720
 editor_draw_limits = true
 editor_draw_drag_margin = true
+
+[node name="waterColl" type="RayCast2D" parent="."]
+position = Vector2( 0, -3 )
+enabled = true
+cast_to = Vector2( 0, 15 )
+collision_mask = 8
+
+[node name="Bubble1" type="Sprite" parent="."]
+visible = false
+position = Vector2( 0, -2 )
+scale = Vector2( 1.2, 1.2 )
+texture = ExtResource( 7 )
+
+[node name="hurtBox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 48
+
+[node name="collision" type="CollisionShape2D" parent="hurtBox"]
+rotation = 1.5708
+shape = SubResource( 53 )
+
+[connection signal="area_entered" from="hurtBox" to="." method="_on_hurtBox_area_entered"]

@@ -1,0 +1,81 @@
+[gd_scene load_steps=6 format=2]
+
+[sub_resource type="GDScript" id=177]
+script/source = "extends Node2D
+
+func _on_start_body_entered(body: Node) -> void:
+	if body.is_in_group(\"bounce\") and body.canRich:
+		$Path2D/PathFollow2D/RemoteTransform2D.remote_path = body.get_path()
+		$AnimationPlayer.play(\"new\")
+
+func _on_AnimationPlayer_animation_finished(anim_name: String) -> void:
+	CharacterCtrl.change(3, self)
+"
+
+[sub_resource type="Animation" id=175]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Path2D/PathFollow2D:unit_offset")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 1.0 ]
+}
+
+[sub_resource type="Animation" id=176]
+resource_name = "new"
+tracks/0/type = "value"
+tracks/0/path = NodePath("Path2D/PathFollow2D:unit_offset")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, 1.0 ]
+}
+
+[sub_resource type="Curve2D" id=174]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, -336, 392, 0, 0, 0, 0, -344, 120, 0, 0, 0, 0, -544, 112, 0, 0, 0, 0, -552, -280, 0, 0, 0, 0, -200, -288 )
+}
+
+[sub_resource type="CircleShape2D" id=173]
+radius = 20.0
+
+[node name="Bounce" type="Node2D"]
+script = SubResource( 177 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+playback_process_mode = 0
+playback_speed = 0.8
+anims/RESET = SubResource( 175 )
+anims/new = SubResource( 176 )
+
+[node name="Path2D" type="Path2D" parent="."]
+curve = SubResource( 174 )
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Path2D"]
+position = Vector2( -474.217, 114.791 )
+rotation = -3.10162
+offset = 400.801
+loop = false
+
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="Path2D/PathFollow2D"]
+
+[node name="start" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="start"]
+shape = SubResource( 173 )
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
+[connection signal="body_entered" from="start" to="." method="_on_start_body_entered"]

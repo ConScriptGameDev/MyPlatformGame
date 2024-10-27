@@ -1,12 +1,12 @@
 extends KinematicBody2D
 
 onready var anim := $anim as AnimationPlayer 
-onready var sprite := $texture as Sprite 
-onready var rightCollider := $RayCast2D3 as RayCast2D
-onready var leftCollider := $RayCast2D4 as RayCast2D
+onready var sprite := $texture as Sprite
+onready var isWall := $RayCast2D3 as RayCast2D
 var jumpCount = 0
 
 var velocity = Vector2.ZERO
+var direction = 0
 var enterState = true
 var currentState = 0
 enum{IDLE, RUN, JUMP, DOUBLE, WALL, FALL, HIT}
@@ -21,12 +21,15 @@ func _physics_process(delta: float) -> void:
 			jump(delta)
 		DOUBLE:
 			double(delta)
-#		WALL:
-#			wall(delta)
+		WALL:
+			wall(delta)
 		FALL:
 			fall(delta)
 #		HIT:
 #			hit(delta)
+		
+	if $waterColl.is_colliding():
+		self.global_position = Global.check
 		
 func gravity(delta):
 	velocity.y += 800 * delta
@@ -36,10 +39,14 @@ func slide():
 
 func move():
 	if Input.is_action_pressed("left"):
+		direction = -1
+		isWall.scale.x = -1
 		velocity.x = -150
 		sprite.flip_h = true
 		CharacterCtrl.facingLeft = true
 	elif Input.is_action_pressed("right"):
+		direction = 1
+		isWall.scale.x = 1
 		velocity.x = 150
 		sprite.flip_h = false
 		CharacterCtrl.facingLeft = false
@@ -80,20 +87,10 @@ func double(delta):
 	move()
 	setState(isJumpingTwice())
 
-#func wall(delta):
-#	anim.play("wallJump")
-#	move_and_slide(Vector2.DOWN * 20)
-#	if rightCollider.is_colliding():
-#		if Input.is_action_just_pressed("jump"):
-#			velocity.x = -180
-#			sprite.flip_h = true
-#	if leftCollider.is_colliding():
-#		if Input.is_action_just_pressed("jump"):
-#			velocity.x = 180
-#			sprite.flip_h = false
-#	if Input.is_action_just_pressed("jump") and (Input.is_action_pressed("left") or Input.is_action_pressed("right")):
-#		move_and_slide(Vector2.DOWN * 2000)
-#	setState(isJumpingWall())
+func wall(delta):
+	anim.play("wallJump")
+	gravity(delta)
+	setState(isJumpingWall())
 
 #func hit(delta):
 #	anim.play("hit")
@@ -131,8 +128,8 @@ func isJumping():
 		newState = FALL
 	if Input.is_action_just_pressed("jump") and jumpCount > 0:
 		newState = DOUBLE
-#	if is_on_wall() and !is_on_floor():
-#		newState = WALL
+	if isWall.is_colliding() and !is_on_floor():
+		newState = WALL
 	return newState
 
 func isJumpingTwice():
@@ -141,19 +138,29 @@ func isJumpingTwice():
 		newState = FALL
 	if is_on_floor():
 		newState = IDLE
-#	if is_on_wall() and !is_on_floor():
-#		newState = WALL
+	if isWall.is_colliding() and !is_on_floor():
+		newState = WALL
 	return newState
 
-#func isJumpingWall():
-#	var newState = currentState
-#	if Input.is_action_just_pressed("jump"):
-#		newState = JUMP
-#	if is_on_floor():
-#		newState = IDLE
-#	if !is_on_wall():
-#		newState = FALL
-#	return newState
+func isJumpingWall():
+	var newState = currentState
+	if Input.is_action_just_pressed("jump"):
+		newState = JUMP
+		if direction > 0:
+			sprite.flip_h = true
+			velocity.x = -180
+			isWall.scale.x = direction * -1
+			direction *= -1
+		else:
+			sprite.flip_h = false
+			velocity.x = 180
+			isWall.scale.x = direction * -1
+			direction *= -1
+	if is_on_floor():
+		newState = IDLE
+	if !is_on_wall() and (Input.is_action_pressed("left") or Input.is_action_pressed("right")):
+		newState = FALL
+	return newState
 	
 func isFalling():
 	var newState = currentState
@@ -161,8 +168,8 @@ func isFalling():
 		newState = IDLE
 	if Input.is_action_just_pressed("jump") and jumpCount > 0:
 		newState = DOUBLE
-#	if is_on_wall() and !is_on_floor():
-#		newState = WALL
+	if isWall.is_colliding() and !is_on_floor():
+		newState = WALL
 	return newState
 
 #func isHitted():
@@ -172,3 +179,7 @@ func setState(newState):
 	if newState != currentState:
 		enterState = true
 	currentState = newState
+
+
+func _on_hurtBox_area_entered(area: Area2D) -> void:
+	global_position = Global.check

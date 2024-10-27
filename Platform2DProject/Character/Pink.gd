@@ -1,12 +1,15 @@
 extends KinematicBody2D
 
 onready var anim := $anim as AnimationPlayer 
-onready var sprite := $texture as Sprite 
+onready var sprite := $texture as Sprite
+onready var rightCollider := $RayCast2D3 as RayCast2D
+onready var leftCollider := $RayCast2D4 as RayCast2D
 
 var velocity = Vector2.ZERO
 var enterState = true
 var currentState = 0
-enum{IDLE, RUN, JUMP, FALL, HIT}
+var canRich = false
+enum{IDLE, RUN, JUMP, BALL, FALL, HIT}
 
 func _physics_process(delta: float) -> void:
 	match currentState:
@@ -16,11 +19,21 @@ func _physics_process(delta: float) -> void:
 			run(delta)
 		JUMP:
 			jump(delta)
+		BALL:
+			ball(delta)
 		FALL:
 			fall(delta)
 #		HIT:
 #			hit(delta)
 		
+	if $waterColl.is_colliding():
+		self.global_position = Global.check
+		
+	wall(delta)
+	
+	if Input.is_action_just_pressed("unique"):
+		canBouce(true)
+	
 func gravity(delta):
 	velocity.y += 400 * delta
 
@@ -61,6 +74,25 @@ func jump(delta):
 	slide()
 	setState(isJumping())
 
+func ball(delta):
+	if enterState:
+		anim.play("jump")
+		velocity.y = -250
+		enterState = false
+	gravity(delta)
+	move(2)
+	slide()
+
+func wall(delta):
+	if rightCollider.is_colliding():
+		move_and_slide(Vector2.LEFT * 200)
+		velocity.x = -400
+		setState(BALL)
+	if leftCollider.is_colliding():
+		move_and_slide(Vector2.RIGHT * 200)
+		velocity.x = 400
+		setState(BALL)
+
 #func hit(delta):
 #	anim.play("hit")
 #	setState(isHitted())
@@ -83,6 +115,7 @@ func isStopped():
 	return newState
 
 func isRunning():
+	canBouce(false)
 	var newState = currentState
 	if !Input.is_action_pressed("left") && !Input.is_action_pressed("right"):
 		newState = IDLE
@@ -93,12 +126,14 @@ func isRunning():
 	return newState
 
 func isJumping():
+	canBouce(false)
 	var newState = currentState
 	if velocity.y >= 0:
 		newState = FALL
 	return newState
-	
+
 func isFalling():
+	canBouce(false)
 	var newState = currentState
 	if is_on_floor():
 		newState = IDLE
@@ -111,3 +146,19 @@ func setState(newState):
 	if newState != currentState:
 		enterState = true
 	currentState = newState
+
+func canBouce(value:bool = false):
+	if value:
+		canRich = true
+		$ball.show()
+		leftCollider.set_deferred("enabled", true)
+		rightCollider.set_deferred("enabled", true)
+	else:
+		canRich = false
+		$ball.hide()
+		leftCollider.set_deferred("enabled", false)
+		rightCollider.set_deferred("enabled", false)
+
+
+func _on_hurtBox_area_entered(area: Area2D) -> void:
+	global_position = Global.check
